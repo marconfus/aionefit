@@ -48,6 +48,7 @@ class NefitCore(object):
                                           encryption=self.encryption,
                                           nefit_client=self)
 
+    def connect(self):
         self.xmppclient.connect()
 
     def disconnect(self):
