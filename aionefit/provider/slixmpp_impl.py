@@ -32,9 +32,12 @@ class NefitXmppClient(slixmpp.ClientXMPP):
     def on_failed_auth(self, event):
         """Callback handler for an unsuccessfull authentication.
         """
-        _LOGGER.error('failed_auth event: %s', event)
-        raise SystemError('Invalid login. Check credentials ' +
-                          '(serial_number, access_key, password).')
+        if self.netfit_client.failed_auth_handler:
+            self.netfit_client.failed_auth_handler(event)
+        else:
+            _LOGGER.error('failed_auth event: %s', event)
+            raise SystemError('Invalid login. Check credentials ' +
+                              '(serial_number, access_key, password).')
 
     def on_auth_success(self, event):
         """Callback handler for a successfull authentication.

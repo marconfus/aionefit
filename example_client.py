@@ -21,24 +21,22 @@ async def main(loop):
                        access_key=ACCESS_KEY,
                        password=PASSWORD,
                        message_callback=parse_message)
-
+    client.connect()
     loop.nefitclient = client
 
     await client.xmppclient.connected_event.wait()
 
     client.get('/ecus/rrc/uiStatus')
-    await client.xmppclient.message_event.wait()
-    # client.put_value('/heatingCircuits/hc1/usermode', 'manual')
+    # await client.xmppclient.message_event.wait()
+    # client.put_value('/heatingCircuits/hc1/usermode', 'clock')
     # client.set_temperature(22)
     # client.get('/heatingCircuits/hc1/manualTempOverride/status')
-    # cause "400 Bad Request"
-    # client.get('/ecus/rrc/ppm')
 
     # client.get('/')
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO,
+    logging.basicConfig(level=logging.DEBUG,
                         format='%(levelname)-8s %(module)s/%(funcName)s : ' +
                         '%(message)s')
     logging.getLogger('aionefit').setLevel(logging.DEBUG)

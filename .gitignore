@@ -3,3 +3,7 @@ venv/
 *.pyc
 .vscode
 secrets.py
+build/
+dist/
+*.egg-info
+nefit.dump
