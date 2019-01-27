@@ -1,4 +1,4 @@
-# Python asyncio library for Bosch thermostats
+# Python asyncio library for (some) Bosch thermostats
 
 aionefit is a Python library to control some Bosch thermostats using the Python asycio framework. This is done with the [Slixmpp](https://slixmpp.readthedocs.io) library.
 
