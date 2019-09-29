@@ -14,22 +14,21 @@ class NefitXmppClient(slixmpp.ClientXMPP):
 
         slixmpp.ClientXMPP.__init__(self, jid, password,
                                     sasl_mech="DIGEST-MD5")
-        self.jid = jid
         self.nefit_client = nefit_client
         # the event signaling, that the connection is established
         self.connected_event = asyncio.Event()
+        self.disconnected_event = asyncio.Event()
         self.message_event = asyncio.Event()
 
         # set the various callback handlers
         self.add_event_handler('session_start', self.session_start)
-        self.add_event_handler('session_end', self.session_start)
+        self.add_event_handler('session_end', self.session_end)
         self.add_event_handler('message', self.message_callback)
         self.add_event_handler('carbon_received', self.carbonmsg_recv_callblack)
         self.add_event_handler('carbon_sent', self.carbonmsg_sent_callblack)
         self.add_event_handler('failed_auth', self.on_failed_auth)
         self.add_event_handler('auth_success', self.on_auth_success)
         self.register_plugin('xep_0199') #ping
-        #self.register_plugin('xep_0030') #discovery
         self.register_plugin('xep_0280') #carbons
         self.encryption = encryption
 
@@ -54,13 +53,12 @@ class NefitXmppClient(slixmpp.ClientXMPP):
         """
         self.send_presence()
         self.get_roster()
-        #self.update_roster(self.jid, subscription='both')
-        #self['xep_0030'].get_info(jid=self.jid)
         self['xep_0280'].enable()
         self.connected_event.set()
 
     def session_end(self, event):
-        self.nefit_client.disconnected_callback()
+        _LOGGER.debug("Connection was closed")
+        self.disconnected_event.set()
 
     def message_callback(self, msg):
         """Callback handler for a received message.

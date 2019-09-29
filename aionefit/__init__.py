@@ -54,9 +54,6 @@ class NefitCore(object):
     def disconnect(self):
         self.xmppclient.disconnect()
 
-    def disconnected_callback(self):
-        _LOGGER.debug("Connection was closed")
-        
     def raw_message_callback(self, msg):
         if msg['type'] in ('chat', 'normal'):
             headers = msg['body'].split("\n")[:-1]
