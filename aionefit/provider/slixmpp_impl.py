@@ -58,6 +58,10 @@ class NefitXmppClient(slixmpp.ClientXMPP):
 
     def session_end(self, event):
         _LOGGER.debug("Connection was closed")
+
+        if self.nefit_client.session_end_callback:
+            self.nefit_client.session_end_callback()
+            
         self.disconnected_event.set()
 
     def message_callback(self, msg):
