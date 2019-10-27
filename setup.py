@@ -18,7 +18,7 @@ URL = 'https://github.com/marconfus/aionefit'
 EMAIL = 'marconfus@gmail.com'
 AUTHOR = 'Marco Reichwald'
 REQUIRES_PYTHON = '>=3.5.0'
-VERSION = "0.3"
+VERSION = "0.5"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
