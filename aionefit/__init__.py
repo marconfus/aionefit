@@ -54,36 +54,45 @@ class NefitCore(object):
     def disconnect(self):
         self.xmppclient.disconnect()
 
-    def raw_message_callback(self, msg):
+    def raw_message_callback(self, msg, source):
+        decodeSuccess = False
         if msg['type'] in ('chat', 'normal'):
             headers = msg['body'].split("\n")[:-1]
             body = msg['body'].split("\n")[-1:][0]
             _LOGGER.debug('headers: %s', headers)
             _LOGGER.debug('body: %s', body)
-            response = self.encryption.decrypt(body)
-            _LOGGER.debug('response: %s', response)
 
-            statusline = headers[0]
-            statuscode = statusline.split(" ")[1]
-            if statuscode == "204":
-                _LOGGER.debug('Empty message (204 No Content) received')
+            try:
+                 # Try to decode the message. Will fail if password is incorrect
+                response = self.encryption.decrypt(body)
+                _LOGGER.debug('response: %s', response)
 
-            elif statuscode == "200":
-                try:
-                    data = json.loads(response)
-                    if self.message_callback:
-                        self.message_callback(data)
-                except json.decoder.JSONDecodeError as e:
-                    _LOGGER.error('Error parsing message %s', msg)
-                    _LOGGER.error(e)
-                    return
-            else:
-                _LOGGER.error("Errormessage received: %s", statusline)
-                if response:
-                    _LOGGER.error(response)
+                statusline = headers[0]
+                statuscode = statusline.split(" ")[1]
+                if statuscode == "204":
+                    _LOGGER.debug('Empty message (204 No Content) received')
+
+                elif statuscode == "200":
+                    try:
+                        data = json.loads(response)
+                        if self.message_callback:
+                            self.message_callback(data)
+                    except json.decoder.JSONDecodeError as e:
+                        _LOGGER.error('Error parsing message %s', msg)
+                        _LOGGER.error(e)
+                        return
                 else:
-                    _LOGGER.error("response is null")
-                raise SystemError(statusline)
+                    _LOGGER.error("Errormessage received: %s", statusline)
+                    if response:
+                        _LOGGER.error(response)
+                    else:
+                        _LOGGER.error("response is null")
+                    raise SystemError(statusline)
+            except UnicodeDecodeError:
+                if source == 'message':
+                    _LOGGER.error('Error decrypting message. Password incorrect?')
+                    if self.failed_auth_handler:
+                        self.failed_auth_handler('auth_error_password')
 
     def get(self, path):
         """Construct a "GET command"

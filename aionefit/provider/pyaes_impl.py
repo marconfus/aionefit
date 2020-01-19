@@ -34,7 +34,8 @@ class AESCipher(object):
         try:
             r = decrypted.decode("utf8").rstrip(chr(0))
         except UnicodeDecodeError as e:
-            raise SystemError("Decryption error (%s). Wrong password?", e)
+            raise
+            
         return r
 
     def _pad(self, s):

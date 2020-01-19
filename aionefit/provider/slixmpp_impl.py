@@ -41,7 +41,7 @@ class NefitXmppClient(slixmpp.ClientXMPP):
         else:
             _LOGGER.error('failed_auth event: %s', event)
             raise SystemError('Invalid login. Check credentials ' +
-                              '(serial_number, access_key, password).')
+                              '(serial_number, access_key).')
 
     def on_auth_success(self, event):
         """Callback handler for a successfull authentication.
@@ -67,14 +67,13 @@ class NefitXmppClient(slixmpp.ClientXMPP):
     def message_callback(self, msg):
         """Callback handler for a received message.
         """
-        self.nefit_client.raw_message_callback(msg)
+        self.nefit_client.raw_message_callback(msg, 'message')
         self.message_event.set()
 
     def carbonmsg_recv_callblack(self, msg):
         """Callback handler for a received carbon message.
         """
-        self.nefit_client.raw_message_callback(msg['carbon_received'])
-        self.message_event.set()
+        self.nefit_client.raw_message_callback(msg['carbon_received'], 'carbon')
 
     def carbonmsg_sent_callblack(self, msg):
         """Callback handler for a sent carbon message.
