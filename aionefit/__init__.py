@@ -48,13 +48,13 @@ class NefitCore(object):
                                           encryption=self.encryption,
                                           nefit_client=self)
 
-    def connect(self):
+    async def connect(self):
         self.xmppclient.connect()
 
-    def disconnect(self):
+    async def disconnect(self):
         self.xmppclient.disconnect()
 
-    def raw_message_callback(self, msg, source):
+    async def raw_message_callback(self, msg, source):
         decodeSuccess = False
         if msg['type'] in ('chat', 'normal'):
             headers = msg['body'].split("\n")[:-1]
@@ -76,7 +76,7 @@ class NefitCore(object):
                     try:
                         data = json.loads(response)
                         if self.message_callback:
-                            self.message_callback(data)
+                            await self.message_callback(data)
                     except json.decoder.JSONDecodeError as e:
                         _LOGGER.error('Error parsing message %s', msg)
                         _LOGGER.error(e)
@@ -92,7 +92,7 @@ class NefitCore(object):
                 if source == 'message':
                     _LOGGER.error('Error decrypting message. Password incorrect?')
                     if self.failed_auth_handler:
-                        self.failed_auth_handler('auth_error_password')
+                        await self.failed_auth_handler('auth_error_password')
 
     def get(self, path):
         """Construct a "GET command"
