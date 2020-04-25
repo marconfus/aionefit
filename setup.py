@@ -23,7 +23,7 @@ VERSION = "0.11"
 # What packages are required for this module to be executed?
 REQUIRED = [
     "pyaes",
-    "slixmpp @ https://lab.louiz.org/poezio/slixmpp/-/archive/c3fbc6cb80902102a9f73ffab72e0ebd52c912af/slixmpp-c3fbc6cb80902102a9f73ffab72e0ebd52c912af.zip#egg=slixmpp-1.4.3"
+    "slixmppfix"
 ]
 
 # What packages are optional?
