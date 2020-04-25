@@ -18,11 +18,12 @@ URL = 'https://github.com/marconfus/aionefit'
 EMAIL = 'marconfus@gmail.com'
 AUTHOR = 'Marco Reichwald'
 REQUIRES_PYTHON = '>=3.5.0'
-VERSION = "0.8"
+VERSION = "0.11"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'slixmpp', "pyaes"
+    "pyaes",
+    "slixmpp @ https://lab.louiz.org/poezio/slixmpp/-/archive/c3fbc6cb80902102a9f73ffab72e0ebd52c912af/slixmpp-c3fbc6cb80902102a9f73ffab72e0ebd52c912af.zip#egg=slixmpp-1.4.3"
 ]
 
 # What packages are optional?
