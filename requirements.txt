@@ -1,2 +1,2 @@
 pyaes
-git+https://lab.louiz.org/poezio/slixmpp.git@c3fbc6cb80902102a9f73ffab72e0ebd52c912af#egg=slixmpp
+slixmpp
