@@ -14,14 +14,14 @@ async def main(loop):
         else:
             pprint(msg)
 
-    def parse_message(msg):
+    async def parse_message(msg):
         pprint(msg)
 
     client = NefitCore(serial_number=SERIAL_NUMBER,
                        access_key=ACCESS_KEY,
                        password=PASSWORD,
                        message_callback=parse_message)
-    client.connect()
+    await client.connect()
     loop.nefitclient = client
 
     await client.xmppclient.connected_event.wait()
